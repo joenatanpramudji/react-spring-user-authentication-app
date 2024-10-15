@@ -11,6 +11,8 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
 
+import java.util.Arrays;
+
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
@@ -25,7 +27,7 @@ public class SecurityConfig {
                                 .anyRequest().authenticated()  // Secure other endpoints
                 )
                 .oauth2Login(oauth2 -> oauth2  // Enable OAuth2 login
-                        .loginPage("/oauth2/authorization/github")  // GitHub login page
+                        .loginPage("/oauth2/authorization/github")  // Default to Github login page
                         .defaultSuccessUrl("/api/auth/welcome", true)  // Redirect to welcome page after success
                         .failureUrl("/login?error=true")  // Redirect to error page on failure
                 );
@@ -51,8 +53,8 @@ public class SecurityConfig {
         CorsConfiguration config = new CorsConfiguration();
         config.setAllowCredentials(true);
         config.addAllowedOrigin("http://localhost:3000");  // Limit origin for security
-        config.addAllowedHeader("*");
-        config.addAllowedMethod("*");
+        config.setAllowedHeaders(Arrays.asList("Authorization", "Cache-Control", "Content-Type"));  // Specify allowed headers
+        config.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE"));  // Specify allowed methods
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/api/**", config);

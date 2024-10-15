@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import githubLogo from './github-logo.png'; 
+import googleLogo from './google-logo.png';  
 
 function Login() {
   const [email, setEmail] = useState("");
@@ -17,6 +19,14 @@ function Login() {
     } catch (err) {
       setError("Invalid email or password");
     }
+  };
+
+  const handleGithubLogin = () => {
+    window.location.href = "http://localhost:8080/oauth2/authorization/github";  // Redirect to GitHub OAuth2 login
+  };
+
+  const handleGoogleLogin = () => {
+    window.location.href = "http://localhost:8080/oauth2/authorization/google";  // Redirect to Google OAuth2
   };
 
   return (
@@ -42,6 +52,16 @@ function Login() {
         </div>
         <button type="submit">Login</button>
       </form>
+      
+      <div className="oauth-login">
+        <p>Or login with:</p>
+        <button onClick={handleGithubLogin} className="github-login">
+          <img src={githubLogo} alt="GitHub Logo" className="github-logo" /> Login with GitHub
+        </button>
+        <button onClick={handleGoogleLogin} className="google-login">
+          <img src={googleLogo} alt="Google Logo" className="github-logo" /> Login with Google
+        </button>
+      </div>
     </div>
   );
 }
